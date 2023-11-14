@@ -106,10 +106,14 @@ Just (x.fst, x.snd) doesn't infer the sum-of-products type we want -/
 
 def distribute {α β γ : Type} (x : α × (β ⊕ γ)) : (α × β) ⊕ (α × γ) :=
   match x.snd with
-  | β => (x.1, x.2) /- how do I tell lean that these two match options make the type we want???-/
-  | γ => (x.fst, x.snd)
-
+  | Sum.inl b => Sum.inl (x.fst, b)
+  | Sum.inr g => Sum.inr (x.fst, g)
+/- I AM STARTING TO UNDERSTAND -/
 
 /- Using the analogy between types and arithmetic, write a function that turns multiplication by two into a sum. -/
 /- type: Bool × α → α ⊕ α -/
 /- 😥 maybe similar issue to the previous exercise, I am not sure of the syntax I need to express this -/
+def double { α : Type } (x : (Bool × α)) : (α ⊕ α) :=
+  if x.fst then Sum.inl x.snd else Sum.inr x.snd
+
+/- yessss -/
