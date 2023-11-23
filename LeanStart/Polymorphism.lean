@@ -50,9 +50,14 @@ def last {α : Type} (xs : List α): Option α :=
 def List.findFirst? {α : Type} (xs : List α ) (predicate : α -> Bool) : Option α :=
   match xs with
   | [] => Option.none
-  | y :: ys => if predicate y then y else findFirst? ys predicate
+  | y :: ys => if predicate y then some y else findFirst? ys predicate
+
+/- I was just rereading this. Originally I had `then y else ...` instead of `then some y else ...`-/
+/- And it worked, compiled, eval'd. Why wasn't that an error? I was returning α instead of Option α . -/
+/- Did it get lifted automaically? -/
 
 #eval [1,2,3].findFirst? (· % 2 == 0)
+#check List.findFirst?
 
 /- Write a function Prod.swap that swaps the two fields in a pair. -/
 def Prod.swap {α β : Type} (pair : α × β) : β × α := {fst := pair.snd, snd := pair.fst }
